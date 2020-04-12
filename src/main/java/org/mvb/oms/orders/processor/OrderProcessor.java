@@ -28,7 +28,9 @@ public class OrderProcessor {
         GlobalKTable<String, JsonNode> productsTable   = builder.globalTable("products", Consumed.with(Serdes.String(), jsonSerdes));
         GlobalKTable<String, JsonNode> customersTable  = builder.globalTable("customers", Consumed.with(Serdes.String(), jsonSerdes));
         KStream<String, JsonNode> ordersStream         = builder.stream("orders", Consumed.with(Serdes.String(), jsonSerdes));
-
+        /**
+         * FIXME I need a way to copy the stream in a right way
+         */
         ordersStream.flatMapValues(this::flatItems)
                     .join(productsTable, this::selectProduct, this::addProductItem)
                     .to("orders-with-product", Produced.with(Serdes.String(), jsonSerdes));

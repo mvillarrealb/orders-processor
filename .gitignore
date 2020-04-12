@@ -5,3 +5,6 @@
 
 # Ignore Gradle build output directory
 build
+
+# Ignore node modules for the demo producer
+node_modules
