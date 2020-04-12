@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'application'
+    id "com.github.johnrengelman.shadow" version "4.0.2"
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+
+repositories {
+    jcenter()
+}
+configurations {
+    developmentOnly
+}
+
+dependencies {
+    compile group: 'org.apache.kafka', name: 'kafka-streams', version: '2.4.1'
+    compile group: 'org.apache.kafka', name: 'kafka-clients', version: '2.4.1'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+    testCompile group: 'org.apache.kafka', name: 'kafka-streams-test-utils', version: '2.4.1'
+    testImplementation 'junit:junit:4.12'
+}
+
+test.classpath += configurations.developmentOnly
+
+mainClassName = "streams.applications.WordCountApplication"
+
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+    options.compilerArgs.add('-parameters')
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
